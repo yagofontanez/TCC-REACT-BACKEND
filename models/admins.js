@@ -1,9 +1,8 @@
-'use-strict';
+'use strict';
 
 const { Model, DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize) => {
     class Admin extends Model { }
 
     Admin.init({
@@ -31,21 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'ADMINS',
         timestamps: true,
         createdAt: 'createdAt',
+        updatedAt: 'updatedAt',
         deletedAt: 'deletedAt',
-        paranoid: true,
-        hooks: {
-            beforeCreate: async (admin) => {
-                const salt = await bcrypt.genSalt(10);
-                admin.SENHA = await bcrypt.hash(admin.SENHA, salt);
-            },
-            beforeUpdate: async (admin) => {
-                if (admin.changed('SENHA')) {
-                    const salt = await bcrypt.genSalt(10);
-                    admin.SENHA = await bcrypt.hash(admin.SENHA, salt);
-                }
-            }
-        }
+        paranoid: true
     });
 
     return Admin;
-}
+};

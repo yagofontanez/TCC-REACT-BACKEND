@@ -1,5 +1,6 @@
 const { Admin } = require('../models');
-const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { verifyRegistrationToken, generateRegistrationToken } = require('../services/tokenServices');
 
 const validateEmail = (email) => {
     const re = /\S+@\S+\.\S+/;
@@ -30,11 +31,11 @@ const AdminsController = {
     },
 
     async create(req, res) {
-        const { NOME_USUARIO, EMAIL, SENHA } = req.body;
+        const { NOME_USUARIO, EMAIL, SENHA, TOKEN } = req.body;
 
-        console.log("Dados recebidos: ", { NOME_USUARIO, EMAIL, SENHA });
+        console.log("Dados recebidos: ", { NOME_USUARIO, EMAIL, SENHA, TOKEN });
 
-        if (!NOME_USUARIO || !EMAIL || !SENHA) {
+        if (!NOME_USUARIO || !EMAIL || !SENHA || !TOKEN) {
             return res.status(400).json({ error: 'Todos os campos são obrigatórios' });
         }
 
@@ -46,15 +47,18 @@ const AdminsController = {
             return res.status(400).json({ error: 'A senha deve conter mais de 8 caracteres' });
         }
 
+        const isValidToken = verifyRegistrationToken(TOKEN);
+        if (!isValidToken) {
+            return res.status(401).json({ error: 'Token de cadastro inválido' });
+        }
+
         try {
-            const hashedPassword = await bcrypt.hash(SENHA, 10);
-            console.log("Senha criptografada: ", hashedPassword);
             const novoAdmin = await Admin.create({
                 NOME_USUARIO,
                 EMAIL,
-                SENHA: hashedPassword
+                SENHA
             });
-            console.log("Senha armazenada no banco de dados: ", novoAdmin.SENHA);
+            console.log("Admin criado com sucesso: ", novoAdmin);
             res.status(201).json(novoAdmin);
         } catch (error) {
             res.status(500).json({ error: 'Erro ao criar admin' });
@@ -73,7 +77,7 @@ const AdminsController = {
                 res.status(404).json({ error: 'Administrador não encontrado' });
             }
         } catch (e) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: e.message });
         }
     },
 
@@ -92,31 +96,12 @@ const AdminsController = {
         }
     },
 
-    async login(req, res) {
-        const { EMAIL, SENHA } = req.body;
-    
-        console.log("Tentativa de login com: ", { EMAIL, SENHA });
-    
+    async generateToken(req, res) {
         try {
-            const admin = await Admin.findOne({ where: { EMAIL } });
-            if (!admin) {
-                console.log("Admin não encontrado com o email fornecido.");
-                return res.status(401).json({ error: 'Email ou senha inválidos' });
-            }
-    
-            const isPasswordValid = bcrypt.compareSync(SENHA, admin.SENHA);
-            if (!isPasswordValid) {
-                console.log("Senha inválida.");
-                console.log(SENHA, 'SENHA');
-                console.log(admin.SENHA, 'admin.SENHA');
-                return res.status(401).json({ error: 'Email ou senha inválidos' });
-            }
-    
-            console.log("Login bem-sucedido.");
-            res.status(200).json({ message: 'Login bem-sucedido' });
+            const token = generateRegistrationToken();
+            res.json({ token });
         } catch (error) {
-            console.error("Erro ao fazer login: ", error);
-            res.status(500).json({ error: 'Erro ao fazer login' });
+            res.status(500).json({ error: 'Erro ao gerar token' });
         }
     }
 };
