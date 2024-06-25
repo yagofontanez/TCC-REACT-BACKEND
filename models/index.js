@@ -39,4 +39,16 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+const { PedidoCadastro, Faculdade } = db;
+
+Faculdade.hasMany(PedidoCadastro, {
+  foreignKey: 'FACULDADE_PEDIDO',
+  as: 'pedidosCadastro',
+});
+
+PedidoCadastro.belongsTo(Faculdade, {
+  foreignKey: 'FACULDADE_PEDIDO',
+  as: 'faculdade',
+});
+
 module.exports = db;
