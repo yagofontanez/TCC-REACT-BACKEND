@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         PONTO_REFERENCIA: {
             type: DataTypes.STRING,
         },
+        CEP: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     }, {
         sequelize,
         modelName: 'Ponto',
@@ -42,4 +46,4 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     return Ponto;
-}
+};

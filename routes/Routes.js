@@ -8,8 +8,8 @@ const pedidosCadastroRoutes = require('./pedidosCadastro');
 
 const router = express.Router();
 
-router.use('/usuarios', usuariosRoutes);
 router.use('/admins', adminRoutes);
+router.use('/usuarios', usuariosRoutes);
 router.use('/faculdades', faculdadeRoutes);
 router.use('/pontos', pontoRoutes);
 router.use('/pedidosCadastro', pedidosCadastroRoutes);

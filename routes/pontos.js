@@ -2,10 +2,15 @@ const express = require('express');
 const router = express.Router();
 const PontosController = require('../controllers/pontosController');
 
+const authMiddleware = require('../middlewares/authMiddleware');
+
+router.use(authMiddleware);
+
+
 router.get('/', PontosController.index);
 router.get('/:id', PontosController.show);
-router.get('/', PontosController.create);
-router.get('/:id', PontosController.update);
-router.get('/', PontosController.delete);
+router.post('/', PontosController.create);
+router.put('/:id', PontosController.update);
+router.delete('/', PontosController.delete);
 
 module.exports = router;
