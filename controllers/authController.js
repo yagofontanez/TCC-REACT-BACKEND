@@ -11,7 +11,7 @@ const AuthController = {
         return res.status(401).json({ error: 'Email ou senha inválidos' });
       }
 
-      const token = jwt.sign({ id: admin.ID }, process.env.JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: admin.ID }, process.env.JWT_SECRET, { expiresIn: '24h' });
       res.json({ token });
     } catch (error) {
       res.status(500).json({ error: 'Erro ao fazer login' });

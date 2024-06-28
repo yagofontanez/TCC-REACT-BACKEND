@@ -11,6 +11,6 @@ router.get('/', PontosController.index);
 router.get('/:id', PontosController.show);
 router.post('/', PontosController.create);
 router.put('/:id', PontosController.update);
-router.delete('/', PontosController.delete);
+router.delete('/:id', PontosController.delete);
 
 module.exports = router;

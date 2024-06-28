@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'FACULDADE_ID',
         as: 'faculdade'
       });
+      Usuario.belongsTo(models.Ponto, {
+        foreignKey: 'PONTO_ID',
+        as: 'ponto'
+      });
     }
   }
 
@@ -46,6 +50,14 @@ module.exports = (sequelize, DataTypes) => {
         model: 'FACULDADES',
         key: 'ID'
       }
+    },
+    PONTO_ID: {
+     type: DataTypes.UUID,
+     allowNull: true,
+     references: {
+      model: 'PONTOS',
+      key: 'ID',
+     } 
     }
   }, {
     sequelize,
