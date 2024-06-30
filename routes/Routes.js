@@ -6,6 +6,7 @@ const faculdadeRoutes = require('./faculdades');
 const pontoRoutes = require('./pontos');
 const pedidosCadastroRoutes = require('./pedidosCadastro');
 const motoristasRoutes = require('./motoristas');
+const veiculosRoutes = require('./veiculos');
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.use('/faculdades', faculdadeRoutes);
 router.use('/pontos', pontoRoutes);
 router.use('/motoristas', motoristasRoutes);
 router.use('/pedidosCadastro', pedidosCadastroRoutes);
+router.use('/veiculos', veiculosRoutes);
 
 module.exports = router;
