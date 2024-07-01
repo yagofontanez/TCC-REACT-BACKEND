@@ -1,4 +1,6 @@
 const { Usuario, Faculdade } = require('../models');
+const { sendEmail } = require('../services/emailServices');
+const { sendSMS } = require('../services/smsService');
 
 const UsuarioController = {
   async index(req, res) {
@@ -26,6 +28,11 @@ const UsuarioController = {
   async create(req, res) {
     try {
       const usuario = await Usuario.create(req.body);
+
+      const message = `Olá, ${req.body.NOME}, seus dados de login são: Email: ${req.body.EMAIL}, Senha: ${req.body.SENHA}`;
+      sendSMS(req.body.TELEFONE, message);
+
+      sendEmail(req.body.EMAIL, req.body.NOME, req.body.EMAIL, req.body.SENHA);
       res.json(usuario);
     } catch (error) {
       res.status(500).json({ error: error.message });

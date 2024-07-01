@@ -3,14 +3,7 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Motorista extends Model {
-    static associate(models) {
-      Motorista.belongsTo(models.Ponto, {
-        foreignKey: "PONTO_ID",
-        as: "ponto",
-      });
-    }
-  }
+  class Motorista extends Model { }
 
   Motorista.init({
     ID: {
@@ -37,14 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     TELEFONE_MOTORISTA: {
         type: DataTypes.STRING,
         allowNull: false,
-    },
-    PONTO_ID: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        references: {
-            model: 'PONTOS',
-            key: 'ID',
-        }
     },
   }, {
     sequelize,

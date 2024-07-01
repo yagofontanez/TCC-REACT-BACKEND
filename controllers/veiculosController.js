@@ -3,9 +3,7 @@ const { Veiculo, Ponto } = require("../models");
 const VeiculoController = {
   async getAllVeiculos(req, res) {
     try {
-      const veiculos = await Veiculo.findAll({
-        include: "ponto",
-      });
+      const veiculos = await Veiculo.findAll();
       res.json(veiculos);
     } catch (e) {
       res.status(500).json({ message: e.message });
@@ -14,9 +12,7 @@ const VeiculoController = {
 
   async getVeiculoById(req, res) {
     try {
-      const veiculo = await Veiculo.findByPk(req.params.id, {
-        include: "ponto",
-      });
+      const veiculo = await Veiculo.findByPk(req.params.id);
       if (veiculo) {
         res.json(veiculo);
       } else {
@@ -42,9 +38,7 @@ const VeiculoController = {
         where: { ID: req.params.id },
       });
       if (veiculoUpdated) {
-        const updatedVeiculo = await findByPk(req.params.id, {
-          include: "ponto",
-        });
+        const updatedVeiculo = await Veiculo.findByPk(req.params.id);
         res.json(updatedVeiculo);
       } else {
         res.status(404).json({ error: "Veículo não encontrado" });

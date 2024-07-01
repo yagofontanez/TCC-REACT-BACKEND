@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'ID',
         as: 'motorista',
       });
+      Ponto.hasMany(models.Veiculo, {
+        foreignKey: 'ID',
+        as: 'veiculo',
+      });
     }
   }
 
@@ -45,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       allowNull: true,
     },
+    VEICULO_ID: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    }
   }, {
     sequelize,
     modelName: 'Ponto',

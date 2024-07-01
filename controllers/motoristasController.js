@@ -3,7 +3,7 @@ const { Motorista, Ponto } = require("../models");
 const MotoristaController = {
   async getAllMotoristas(req, res) {
     try {
-      const motoristas = await Motorista.findAll({ include: "ponto" });
+      const motoristas = await Motorista.findAll();
       res.json(motoristas);
     } catch (e) {
       res.status(500).json({ error: e.message });
@@ -12,9 +12,7 @@ const MotoristaController = {
 
   async getMotoristaById(req, res) {
     try {
-      const motorista = await Motorista.findByPk(req.params.id, {
-        include: "ponto",
-      });
+      const motorista = await Motorista.findByPk(req.params.id);
       if (motorista) {
         res.json(motorista);
       } else {
@@ -40,9 +38,7 @@ const MotoristaController = {
         where: { ID: req.params.id },
       });
       if (updated) {
-        const updatedMotorista = await Motorista.findByPk(req.params.id, {
-          includes: "ponto",
-        });
+        const updatedMotorista = await Motorista.findByPk(req.params.id);
         res.json(updatedMotorista);
       } else {
         res.status(404).json({ error: "Motorista não encontrado" });

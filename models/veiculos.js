@@ -3,14 +3,7 @@
 const { Model, DataTypes } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class Veiculo extends Model {
-    static associate(models) {
-      Veiculo.belongsTo(models.Ponto, {
-        foreignKey: "PONTO_ID",
-        as: "ponto",
-      });
-    }
-  }
+  class Veiculo extends Model { }
 
   Veiculo.init({
     ID: {
@@ -41,14 +34,6 @@ module.exports = (sequelize, DataTypes) => {
     CAPACIDADE_VEICULOS: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    PONTO_ID: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: "PONTOS",
-        key: "ID",
-      },
     },
   }, {
     sequelize,
