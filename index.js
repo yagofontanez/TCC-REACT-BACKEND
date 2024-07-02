@@ -1,15 +1,58 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors'); 
+const cors = require('cors');
 const morgan = require('morgan');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const { Admin } = require('./models');
+const authMiddleware = require('./middlewares/authMiddleware');
+const routes = require('./routes/Routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const { sequelize } = require('./models');
-const routes = require('./routes/Routes');
+
+const createUploadsFolder = () => {
+  const uploadPath = path.join(__dirname, 'uploads');
+  if (!fs.existsSync(uploadPath)) {
+    fs.mkdirSync(uploadPath, { recursive: true });
+  }
+};
+
+createUploadsFolder();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 
 app.use(morgan('common'));
-app.use(cors()); 
+app.use(cors());
 app.use(express.json());
+
+app.post('/api/upload', authMiddleware, upload.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('Nenhum arquivo enviado.');
+  }
+
+  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  const adminId = req.user.id; 
+
+  try {
+    await Admin.update({ FOTO_PERFIL: fileUrl }, { where: { ID: adminId } });
+    res.status(200).send({ url: fileUrl });
+  } catch (error) {
+    res.status(500).send('Erro ao atualizar a foto de perfil no banco de dados.');
+  }
+});
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', routes);
 

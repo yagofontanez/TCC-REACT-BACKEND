@@ -23,6 +23,10 @@ module.exports = (sequelize) => {
         SENHA: {
             type: DataTypes.STRING,
             allowNull: false,
+        },
+        FOTO_PERFIL: {
+            type: DataTypes.STRING,
+            allowNull: true,
         }
     }, {
         sequelize,
