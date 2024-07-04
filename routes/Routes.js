@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Admin } = require("../models");
 const authMiddleware = require("../middlewares/authMiddleware");
+const FaculdadesController = require('../controllers/faculdadesController');
 const usuariosRoutes = require("./usuarios");
 const adminRoutes = require("./admins");
 const faculdadeRoutes = require("./faculdades");
@@ -29,5 +30,7 @@ router.get("/api/admin/profile", authMiddleware, async (req, res) => {
     res.status(500).send("Erro ao buscar admin.");
   }
 });
+
+router.get('/faculdades-public', FaculdadesController.index);
 
 module.exports = router;

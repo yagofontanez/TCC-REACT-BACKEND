@@ -8,11 +8,12 @@ const {
 
 const authMiddleware = require('../middlewares/authMiddleware');
 
+router.post('/pedidosCadastro', createPedidoCadastro);
+router.get('/', getPedidosCadastro);
+
 router.use(authMiddleware);
 
 
-router.get('/', getPedidosCadastro);
-router.post('/pedidosCadastro', createPedidoCadastro);
 router.delete('/pedidosCadastro/:id', deletePedidoCadastro);
 
 module.exports = router;
