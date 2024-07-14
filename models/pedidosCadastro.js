@@ -3,7 +3,18 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-    class PedidoCadastro extends Model { }
+    class PedidoCadastro extends Model {
+        static associate(models) {
+            PedidoCadastro.belongsTo(models.Faculdade, {
+                foreignKey: 'FACULDADE_PEDIDO',
+                as: 'faculdadePedido'
+            });
+            PedidoCadastro.belongsTo(models.Ponto, {
+                foreignKey: 'PONTO_PEDIDO',
+                as: 'ponto'
+            });
+        }
+    }
 
     PedidoCadastro.init({
         ID: {
@@ -30,12 +41,21 @@ module.exports = (sequelize) => {
         FACULDADE_PEDIDO: {
             type: DataTypes.UUID,
             references: {
-                model: 'FACULDADES',
+                model: 'Faculdade',
                 key: 'ID',
             },
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL',
         },
+        PONTO_PEDIDO: {
+            type: DataTypes.UUID,
+            references: {
+                model: 'Ponto',
+                key: 'ID',
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+        }
     }, {
         sequelize,
         modelName: 'PedidoCadastro',

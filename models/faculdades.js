@@ -3,7 +3,14 @@
 const { Model, DataTypes } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Faculdade extends Model {}
+    class Faculdade extends Model {
+        static associate(models) {
+            Faculdade.hasMany(models.PedidoCadastro, {
+                foreignKey: 'FACULDADE_PEDIDO',
+                as: 'pedidosCadastroFaculdade'
+            });
+        }
+    }
 
     Faculdade.init({
         ID: {

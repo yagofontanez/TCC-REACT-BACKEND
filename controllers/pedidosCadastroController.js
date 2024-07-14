@@ -1,13 +1,20 @@
-const { PedidoCadastro, Faculdade } = require('../models');
+const { PedidoCadastro, Faculdade, Ponto } = require('../models');
 
 const getPedidosCadastro = async (req, res) => {
     try {
         const pedidosCadastro = await PedidoCadastro.findAll({
-            include: {
-                model: Faculdade,
-                as: 'faculdade',
-                attributes: ['ID', 'NOME_FACULDADE'],
-            },
+            include: [
+                {
+                    model: Faculdade,
+                    as: 'faculdade',
+                    attributes: ['ID', 'NOME_FACULDADE'],
+                },
+                {
+                    model: Ponto,
+                    as: 'ponto',
+                    attributes: ['ID', 'NOME_PONTO'], 
+                }
+            ],
         });
         res.status(200).json(pedidosCadastro);
     } catch (error) {
@@ -17,7 +24,7 @@ const getPedidosCadastro = async (req, res) => {
 };
 
 const createPedidoCadastro = async (req, res) => {
-    const { NOME_PEDIDO, SOBRENOME_PEDIDO, EMAIL_PEDIDO, TELEFONE_PEDIDO, FACULDADE_PEDIDO } = req.body;
+    const { NOME_PEDIDO, SOBRENOME_PEDIDO, EMAIL_PEDIDO, TELEFONE_PEDIDO, FACULDADE_PEDIDO, PONTO_PEDIDO } = req.body;
 
     try {
         const newPedidoCadastro = await PedidoCadastro.create({
@@ -26,6 +33,7 @@ const createPedidoCadastro = async (req, res) => {
             EMAIL_PEDIDO,
             TELEFONE_PEDIDO,
             FACULDADE_PEDIDO,
+            PONTO_PEDIDO,
         });
         res.status(201).json(newPedidoCadastro);
     } catch (error) {

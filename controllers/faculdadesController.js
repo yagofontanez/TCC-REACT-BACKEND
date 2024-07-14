@@ -4,6 +4,7 @@ const FaculdadesController = {
     async index(req, res) {
         try {
             const faculdades = await Faculdade.findAll();
+            console.log(faculdades, 'faculdadesss')
             res.json(faculdades);
         } catch (e) {
             res.status(500).json({ e: e.message });

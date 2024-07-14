@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'ID',
         as: 'veiculo',
       });
+      Ponto.hasMany(models.PedidoCadastro, {
+        foreignKey: 'PONTO_PEDIDO',
+        as: 'pedidosCadastro'
+    });
     }
   }
 
