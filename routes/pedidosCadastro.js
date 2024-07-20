@@ -14,6 +14,6 @@ router.get('/', getPedidosCadastro);
 router.use(authMiddleware);
 
 
-router.delete('/pedidosCadastro/:id', deletePedidoCadastro);
+router.delete('/:id', deletePedidoCadastro);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const { Usuario, Faculdade } = require('../models');
 const { sendEmail } = require('../services/emailServices');
 const { sendSMS } = require('../services/smsService');
+const jwt = require('jsonwebtoken');
 
 const UsuarioController = {
   async index(req, res) {
@@ -67,6 +68,27 @@ const UsuarioController = {
       }
     } catch (error) {
       res.status(500).json({ error: error.message });
+    }
+  },
+
+  async loginAluno(req, res) {
+    const { EMAIL, SENHA } = req.body;
+    try {
+      const usuario = await Usuario.findOne({ where: { EMAIL } });
+      if (!usuario) {
+        return res.status(404).json({ error: 'Credenciais inválidas' });
+      }
+
+      const senha = usuario.SENHA === SENHA;
+
+      if (!senha) {
+        return res.status(404).json({ error: 'Credenciais inválidas' });
+      }
+
+      const token = jwt.sign({ id: usuario.ID }, process.env.JWT_SECRET, { expiresIn: '24h' });
+      return res.json({ token, id: usuario.ID, nome: usuario.NOME });
+    } catch(e) {
+      res.status(500).json({ error: e.message })
     }
   }
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const { Admin } = require("../models");
 const authMiddleware = require("../middlewares/authMiddleware");
 const FaculdadesController = require('../controllers/faculdadesController');
+const PontosController = require('../controllers/pontosController');
 const usuariosRoutes = require("./usuarios");
 const adminRoutes = require("./admins");
 const faculdadeRoutes = require("./faculdades");
@@ -32,5 +33,6 @@ router.get("/api/admin/profile", authMiddleware, async (req, res) => {
 });
 
 router.get('/faculdades-public', FaculdadesController.index);
+router.get('/pontos-public', PontosController.index);
 
 module.exports = router;
