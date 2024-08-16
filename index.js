@@ -54,6 +54,19 @@ app.post('/api/upload', authMiddleware, upload.single('file'), async (req, res) 
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get('/geocode', async (req, res) => {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?${req.url}&key=AIzaSyASFUEoFBam3Js9RkZ6Px9c3lCyOMz1NMg`
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error('Erro ao fazer requisição para API do Google Geocoding', error);
+    res.status(500).json({ error: 'Erro ao buscar dados da API do Google Geocoding' });
+  }
+});
+
+
 app.use('/', routes);
 
 app.get('/', (req, res) => {
